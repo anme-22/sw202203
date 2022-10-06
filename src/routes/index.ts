@@ -1,8 +1,9 @@
 import express from 'express';
-const router  = express.Router();
 
-router.get('/', (_req, res) => {
-  res.json({msg:'Hello World!'});
- });
+import CashFlowRouter from './CashFlows';
+
+const router  = express.Router();
+//http://localhost:3001/cashflow/update/1
+router.use('/cashflow',CashFlowRouter);
 
 export default router;
