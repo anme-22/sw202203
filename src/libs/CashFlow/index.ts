@@ -1,5 +1,5 @@
-
-
+import { getConnection } from "@models/sqlite/SqliteConn";
+import { CashFlowDao } from "@models/sqlite/CashFlowDao";
  export interface ICashFlow{
     type:'INCOME' | 'EXPENSE';
     date: Date;
@@ -7,10 +7,20 @@
     description: String;
 };
  export class CashFlow{
+    private dao: CashFlowDao;
+    public constructor(){
+        getConnection()
+        .then(conn=>{
+            this.dao = new CashFlowDao(conn);
+        })
+        .catch(ex=>console.error(ex));
+    }
+
     private cashFlowItems: ICashFlow[]=[];
     //Consultas
-    public getAllCashFlow(): ICashFlow[]{
-        return this.cashFlowItems;// select * from cashflow;
+    public  getAllCashFlow(){
+        this.dao.getCashFlows()
+       // return this.cashFlowItems;// select * from cashflow;
     }
 
     public getCashFlowByIndex(index:number): ICashFlow{
