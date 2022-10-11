@@ -23,24 +23,12 @@ import { CashFlowDao } from "@models/sqlite/CashFlowDao";
        // return this.cashFlowItems;// select * from cashflow;
     }
 
-    public getCashFlowByIndex(index:number): ICashFlow{
-        if(index >= 0 && index<this.cashFlowItems.length){
-            return this.cashFlowItems[index]
-        }
-        throw Error('Index out of range');
+    public getCashFlowByIndex(index:number){
+        return this.dao.getCashFlowById({_id: index});
     }
 
-    public addCashFlow(cashFlow:ICashFlow):number{
-        const cashFlowExists=this.cashFlowItems.findIndex(
-            (obj)=>{
-                return obj.amount == cashFlow.amount && obj.description ==cashFlow.description;
-            }
-        );
-        if(cashFlowExists<0){
-            this.cashFlowItems.push(cashFlow);
-            return this.cashFlowItems.length-1;
-        }
-        throw Error('CashFlow Exists on Collection');
+    public addCashFlow(cashFlow:ICashFlow){
+      return this.dao.insertNewCashFlow(cashFlow);
     }
 
     public updateCashFlow(index:number, cashFlow:ICashFlow):boolean{

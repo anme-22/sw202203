@@ -30,7 +30,7 @@ export  abstract class  AbstractDao<T>  implements IDaoObject {
         //const sqlStr= "INSERT INTO (...columns) values (...valores)";
         const {columns,values,params}=this.getColValParmArr(data);
         const sqlInsert=`INSERT INTO ${this.persistanceName} (${columns.join(', ')}) VALUES (${params.join(', ')})`;
-        await this.connection.exec(sqlInsert,values);
+        await this.connection.run(sqlInsert,values);
         return data;
     }
      public async update(identifier: Partial<T>, data: Partial<T>):Promise<boolean>{

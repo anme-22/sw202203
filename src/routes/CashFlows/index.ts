@@ -6,24 +6,29 @@ const router = Router();
 const cashFlowInstance= new CashFlow;
 
 
-router.get('/',(__req,res)=>{
-    res.json(cashFlowInstance.getAllCashFlow);
+router.get('/', async (__req,res)=>{
+    try{
+        res.json( await cashFlowInstance.getAllCashFlow);
+    } catch( ex){
+        console.log(ex);
+        res.status(503).json({error:ex});
+        }
 });
 
-router.get('/byindex/:index', (req,res)=>{
+router.get('/byindex/:index', async (req,res)=>{
     try{
         const {index} = req.params as unknown as {index:number};
-        res.json(cashFlowInstance.getCashFlowByIndex(index));
+        res.json( await cashFlowInstance.getCashFlowByIndex(index));
     }catch(error){  
         console.log("Error", error);
         res.status(500).json({'msg':'Error al obtener Registro'})
     }
 });
 
-router.post('/new',(req,res)=>{
+router.post('/new', async (req,res)=>{
     try{
       const newCashFlow=req.body as unknown as ICashFlow;
-      const newCashFlowIndex = cashFlowInstance.addCashFlow(newCashFlow);
+      const newCashFlowIndex =  await cashFlowInstance.addCashFlow(newCashFlow);
       res.json({newIndex: newCashFlowIndex});
     }catch(error){
       res.status(500).json({error:(error as Error).message});

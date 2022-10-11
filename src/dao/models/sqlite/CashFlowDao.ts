@@ -4,20 +4,29 @@ import sqlite from 'sqlite';
 
 export class CashFlowDao extends AbstractDao<ICashFlow>{
 
-    public constructor(db:unknown){
-        super('CASHFLOW', db as sqlite.Database) ;
-        super.exec('CREATE TABLE IF NOT EXISTS CASHFLOW(_id INTEGER AUTOINCREMENT NOT NULL PRIMARY KEY,'
-        +' type TEXT,'
-        +' date TEXT'
-        +' amount NUMERIC'
-        +' description TEXT);').then().catch(e=>console.error(e));
-
-    }
+    public constructor(db:sqlite.Database){
+        super('CASHFLOW', db as sqlite.Database );
+        super.exec('CREATE TABLE IF NOT EXISTS CASHFLOW ('
+         + ' _id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,'
+         + ' type TEXT,'
+         + ' date TEXT,'
+         + ' amount NUMERIC,'
+         + ' description TEXT);').then().catch(e=>console.error(e));
+      }
 
     public async getCashFlows(){
-        super.findAll()
+        return super.findAll()
     }
 
+    public async getCashFlowById(identifier : Partial<ICashFlow>){
+        try{
+            const result= await super.findByID(identifier);
+            return result;
+        }catch(ex: unknown){
+            console.log("CashFlowDao sqlire:", (ex as Error).message);
+            throw ex;
+        }
+    }
     public async insertNewCashFlow(newCashFlow:ICashFlow){
         try{
             const result = await super.createOne(newCashFlow);
