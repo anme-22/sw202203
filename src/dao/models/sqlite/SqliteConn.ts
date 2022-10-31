@@ -1,6 +1,5 @@
-import {open} from 'sqlite';
+import { open } from 'sqlite';
 import sqlite3 from 'sqlite3';
-
 let connection = null;
 export const getConnection = async (url?: string)=>{
   console.log(open);
